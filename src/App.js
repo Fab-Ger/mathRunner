@@ -1,25 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
+import './App.css'
+import { TimerProvider } from './context/TimerContext'
+import Road from './component/Road'
+import { PlayerProvider } from './context/playerContext'
+import PlayerControler from './component/player/PlayerControler'
+import TimerConrols from './component/TimerConrols'
 
-function App() {
+function App () {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='App'>
+      <TimerProvider>
+        <PlayerProvider>
+          <div>
+            <Road />
+            <PlayerControler />
+            <TimerConrols />
+          </div>
+        </PlayerProvider>
+      </TimerProvider>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
