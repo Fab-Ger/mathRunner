@@ -1,4 +1,3 @@
-import { useCallback } from 'react'
 
 const formulas = [
   { label: ' x3', compute: (val) => { return (val * 3) } },
@@ -12,6 +11,7 @@ const opterators = [
   { label: ' / ', compute: (val, val2) => { return val / val2 } },
   { label: ' + ', compute: (val, val2) => { return val + val2 } },
   { label: ' - ', compute: (val, val2) => { return val - val2 } },
+  { label: ' ^ ', compute: (val, val2) => { return Math.pow(val, val2) } },
   { label: ' = ', compute: (val, val2) => { return val2 } }
 ]
 
@@ -20,7 +20,7 @@ const getFormulas = () => {
   for (let i = 1; i < 5; i++) {
     for (let index = 0; index < opterators.length; index++) {
       const ope = opterators[index]
-        forms.push({ label: `${ope.label}${i}`, compute: (val) => { return ope.compute(val, i) } })
+      forms.push({ label: `${ope.label}${i}`, compute: (val) => { return ope.compute(val, i) } })
     }
   }
   forms.push({ label: ' = 0', compute: (val) => { return (0) } })
