@@ -5,12 +5,10 @@ import { useTimer } from '../context/TimerContext'
 import { rndFormula } from './data/Formulas'
 import Opponents from './Opponents'
 
-const Chunk = ({ chunk, color, pos, RoadHeight, nbChunk, compute }) => {
+const Chunk = ({ chunk, pos, RoadHeight, nbChunk }) => {
   const [chosen, setChosen] = useState(false)
-  const [formulaRight, setformulaRight] = useState(rndFormula())
-  const [formulaLeft, setformulaLeft] = useState(rndFormula())
   const { state: timer } = useTimer()
-  const { state: game, GameContextFn } = useGame()
+  const { state: { chunks }, GameContextFn } = useGame()
 
   const h = RoadHeight / nbChunk
 
@@ -53,20 +51,16 @@ const Chunk = ({ chunk, color, pos, RoadHeight, nbChunk, compute }) => {
   }
 
   useEffect(() => {
-    if (chosen && position < h) {
-      setformulaLeft(rndFormula())
-      setformulaRight(rndFormula())
-      setChosen(false)
-      GameContextFn.setChunk({ chosen: false, left: formulaLeft, right: formulaRight }, pos)
-    }
+    if (chunks.length > 0 && timer.interval) {
+      if (chosen && position < h) {
+        GameContextFn.setChunk({ left: rndFormula(), right: rndFormula() }, pos)
+        setChosen(false)
+      }
 
-    if (position >= nbChunk * h - 50 && !chosen) {
-      const newVal = (game.choice === 'left')
-        ? formulaLeft.compute(game.val)
-        : formulaRight.compute(game.val)
-      GameContextFn.setVal(newVal)
-      setChosen(true)
-      GameContextFn.setChunk({ ...game.chunks[pos], chosen: true }, pos)
+      if (position >= nbChunk * h - 50 && !chosen) {
+        setChosen(true)
+        GameContextFn.applyChoice(pos)
+      }
     }
   }, [timer.time])
 
@@ -76,19 +70,21 @@ const Chunk = ({ chunk, color, pos, RoadHeight, nbChunk, compute }) => {
 
         <div style={styles.part}>
           <div style={styles.checkPoint}>
-            {!chosen && formulaLeft && formulaLeft.label}
+            {chunks.length > 0 && !chosen && chunks[pos].left && chunks[pos].left.label}
           </div>
 
         </div>
         <div style={styles.part}>
           <div style={styles.checkPoint}>
-            {!chosen && formulaRight && formulaRight.label}
+            {chunks.length > 0 && !chosen && chunks[pos].right && chunks[pos].right.label}
           </div>
 
         </div>
       </div>
       <div style={styles.content}>
-        <Opponents />
+        {pos}
+        {pos === 1 && <Opponents />}
+
       </div>
 
     </div>

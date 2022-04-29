@@ -1,4 +1,5 @@
 import { useContext, createContext, useReducer } from 'react'
+import { rndFormula } from '../component/data/Formulas'
 
 const GameContext = createContext()
 
@@ -14,7 +15,13 @@ const initialState = {
   position: 50,
   choice: 'left',
   val: 1,
-  chunks: []
+  chunks: [
+    { color: 'red', left: rndFormula(), right: rndFormula() },
+    { color: 'green', left: rndFormula(), right: rndFormula() },
+    { color: 'blue', left: rndFormula(), right: rndFormula() },
+    { color: 'orange', left: rndFormula(), right: rndFormula() }
+  ],
+  nbChunks: 2
 }
 
 const GameReducer = (state, action) => {
@@ -38,7 +45,7 @@ const GameReducer = (state, action) => {
     case actionTypes.SET_CHUNK:
       return {
         ...state,
-        chunks: [...state.chunks.slice(0, action.index), action.chunk, ...state.chunks.slice(++action.index)]
+        chunks: [...state.chunks.slice(0, action.index), { ...state.chunks[action.index], ...action.chunk }, ...state.chunks.slice(action.index + 1)]
       }
     case actionTypes.RESET:
       return initialState
@@ -63,8 +70,19 @@ const GameProvider = ({ children }) => {
   const setChunk = (chunk, index) => {
     dispatch({ type: actionTypes.SET_CHUNK, chunk: chunk, index: index })
   }
+  const applyChoice = (index) => {
+    if (state.chunks[index].left) {
+      const newVal = (state.choice === 'left')
+        ? state.chunks[index].left.compute(state.val)
+        : state.chunks[index].right.compute(state.val)
+      GameContextFn.setVal(newVal)
+      GameContextFn.setChunk({ ...state.chunks[index], chosen: true }, index)
+    } else {
+      console.log('not initialized ' + index)
+    }
+  }
 
-  const GameContextFn = { move, moveTo, setVal, setChunk }
+  const GameContextFn = { move, moveTo, setVal, setChunk, applyChoice }
 
   return <GameContext.Provider value={{ state, GameContextFn }}>{children}</GameContext.Provider>
 }

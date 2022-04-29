@@ -1,7 +1,9 @@
+import { useGame } from '../context/GameContext'
 import Chunk from './Chunk'
 import Player from './player/Player'
 
 const Road = () => {
+  const { state: { chunks } } = useGame()
   const RoadHeight = 500
 
   const styles = {
@@ -23,7 +25,7 @@ const Road = () => {
     }
   }
 
-  const chunks = [{ color: 'red' }, { color: 'green' }, { color: 'blue' }, { color: 'orange' }]
+  // const chunks = [{ color: 'red' }, { color: 'green' }, { color: 'blue' }, { color: 'orange' }]
 
   return (
     <div style={styles.cont}>
