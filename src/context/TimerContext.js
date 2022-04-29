@@ -41,8 +41,10 @@ const TimerReducer = (state, action) => {
 const TimerProvider = ({ children }) => {
   const [state, dispatch] = useReducer(TimerReducer, initialState)
 
-  const tick = () => {
-    dispatch({ type: actionTypes.TICK_UP })
+  const tick = () => { dispatch({ type: actionTypes.TICK_UP }) }
+  const reset = () => {
+    TimerContextFn.stop()
+    dispatch({ type: actionTypes.RESET })
   }
 
   const shiftSpeed = (step) => {
@@ -57,10 +59,12 @@ const TimerProvider = ({ children }) => {
     }
   }
   const stop = () => {
-    clearInterval(state.interval)
-    dispatch({ type: actionTypes.SET_INTERVAL, interval: undefined })
+    if (state.interval) {
+      clearInterval(state.interval)
+      dispatch({ type: actionTypes.SET_INTERVAL, interval: undefined })
+    }
   }
-  const TimerContextFn = { tick, start, stop, shiftSpeed }
+  const TimerContextFn = { tick, start, stop, shiftSpeed, reset }
 
   return <TimerContext.Provider value={{ state, TimerContextFn }}>{children}</TimerContext.Provider>
 }

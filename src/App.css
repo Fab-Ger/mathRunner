@@ -9,6 +9,51 @@
           user-select: none;
 }
 
+.fade-in {
+	opacity: 1;
+	animation-name: fadeInOpacity;
+	animation-iteration-count: 1;
+	animation-timing-function: ease-in;
+	animation-duration: 2s;
+}
+
+@keyframes fadeInOpacity {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+.died-show{
+  display:flex;
+  height: 100vh;
+  width: 100vw;
+  background: black;
+  position: absolute;
+  z-index: 2;
+  justify-content: center;
+  align-items: center;
+  color: red;
+  transition: 2s;
+}
+.hidden{
+
+  
+	opacity: 1;
+	animation-name: fadeInOpacity;
+	animation-iteration-count: 1;
+	animation-timing-function: ease-in;
+	animation-duration: 2s;
+
+  z-index: -1;
+  
+  height: 0px;
+  width: 0px;
+  background: transparent;
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;

@@ -7,10 +7,11 @@ import Opponents from './Opponents'
 
 const Chunk = ({ chunk, pos, RoadHeight, nbChunk }) => {
   const [chosen, setChosen] = useState(false)
+  const [fight, setFight] = useState(false)
   const { state: timer } = useTimer()
   const { state: { chunks }, GameContextFn } = useGame()
 
-  const h = RoadHeight / nbChunk
+  const h = RoadHeight / nbChunk + 10
 
   const position = ((timer.time / 10) + (pos * h)) % (4 * h) - h
 
@@ -51,13 +52,22 @@ const Chunk = ({ chunk, pos, RoadHeight, nbChunk }) => {
   }
 
   useEffect(() => {
-    if (chunks.length > 0 && timer.interval) {
+    if (timer.time > 150) {
+      const dstToBottom = RoadHeight - position
+
       if (chosen && position < h) {
         GameContextFn.setChunk({ left: rndFormula(), right: rndFormula() }, pos)
         setChosen(false)
+        setFight(false)
       }
 
-      if (position >= nbChunk * h - 50 && !chosen) {
+      if (pos === 1 && dstToBottom < 100 && dstToBottom > 80 && !fight) {
+        console.log('fight' + (RoadHeight - position) + ' h ' + h / 9)
+        setFight(true)
+        GameContextFn.fight()
+      }
+
+      if (dstToBottom < 2 * h / 9 && dstToBottom > 0 && !chosen) {
         setChosen(true)
         GameContextFn.applyChoice(pos)
       }
