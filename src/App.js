@@ -1,15 +1,15 @@
 import './App.css'
 import Game from './page/Game'
 import { TimerProvider } from './context/TimerContext'
-import { PlayerProvider } from './context/playerContext'
+import { GameProvider } from './context/GameContext'
 
 function App () {
   return (
     <div className='App'>
       <TimerProvider>
-        <PlayerProvider>
+        <GameProvider>
           <Game />
-        </PlayerProvider>
+        </GameProvider>
       </TimerProvider>
     </div>
   )

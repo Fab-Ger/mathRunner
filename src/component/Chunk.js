@@ -1,15 +1,16 @@
 
 import { useEffect, useState } from 'react'
-import { usePlayer } from '../context/playerContext'
+import { useGame } from '../context/GameContext'
 import { useTimer } from '../context/TimerContext'
 import { rndFormula } from './data/Formulas'
+import Opponents from './Opponents'
 
 const Chunk = ({ chunk, color, pos, RoadHeight, nbChunk, compute }) => {
   const [chosen, setChosen] = useState(false)
   const [formulaRight, setformulaRight] = useState(rndFormula())
   const [formulaLeft, setformulaLeft] = useState(rndFormula())
   const { state: timer } = useTimer()
-  const { state: player, PlayerContextFn } = usePlayer()
+  const { state: game, GameContextFn } = useGame()
 
   const h = RoadHeight / nbChunk
 
@@ -56,14 +57,16 @@ const Chunk = ({ chunk, color, pos, RoadHeight, nbChunk, compute }) => {
       setformulaLeft(rndFormula())
       setformulaRight(rndFormula())
       setChosen(false)
+      GameContextFn.setChunk({ chosen: false, left: formulaLeft, right: formulaRight }, pos)
     }
 
     if (position >= nbChunk * h - 50 && !chosen) {
-      const newVal = (player.position < 50)
-        ? formulaLeft.compute(player.val)
-        : formulaRight.compute(player.val)
-      PlayerContextFn.setVal(newVal)
+      const newVal = (game.choice === 'left')
+        ? formulaLeft.compute(game.val)
+        : formulaRight.compute(game.val)
+      GameContextFn.setVal(newVal)
       setChosen(true)
+      GameContextFn.setChunk({ ...game.chunks[pos], chosen: true }, pos)
     }
   }, [timer.time])
 
@@ -85,7 +88,7 @@ const Chunk = ({ chunk, color, pos, RoadHeight, nbChunk, compute }) => {
         </div>
       </div>
       <div style={styles.content}>
-        <h3> OPPOENENTS</h3>
+        <Opponents />
       </div>
 
     </div>

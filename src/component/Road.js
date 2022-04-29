@@ -10,7 +10,7 @@ const Road = () => {
       height: RoadHeight,
       border: '4px solid gold',
       overflow: 'hidden',
-      transform: 'rotate3d(1, 0, 0, 40deg)',
+      transform: 'rotate3d(1, 0, 0, 30deg)',
       transformStyle: 'preserve-3d'
     },
     poss: {

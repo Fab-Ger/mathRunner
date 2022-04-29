@@ -1,7 +1,8 @@
-import { usePlayer } from '../../context/playerContext'
+import { useRef } from 'react'
+import { useGame } from '../../context/GameContext'
 
 const Player = () => {
-  const { state } = usePlayer()
+  const { state, GameContextFn } = useGame()
   const h = 100
   const w = 50
 
@@ -11,7 +12,7 @@ const Player = () => {
       background: 'black',
       position: 'absolute',
       bottom: 20,
-      left: state.position + '%',
+      left: state.position,
       color: 'white',
       padding: 10,
       transform: 'rotate3d(1, 0, 0, 20deg)',
@@ -23,7 +24,7 @@ const Player = () => {
       background: 'black',
       position: 'absolute',
       bottom: 20,
-      left: state.position + '%',
+      left: state.position,
       color: 'white',
       padding: 10,
       transformStyle: 'preserve-3d'
@@ -56,10 +57,26 @@ const Player = () => {
     top:
     { transform: 'rotateX(90deg) translateZ(' + h / 2 + 'px)' },
     bottom:
-    { transform: 'rotateX(-90deg) translateZ(' + h / 2 + 'px)' }
+    { transform: 'rotateX(-90deg) translateZ(' + h / 2 + 'px)' },
 
+    playerControl: {
+      height: '50%',
+      position: 'absolute',
+      left: 0,
+      bottom: 0,
+      right: 0
+    }
   }
 
+  const ref = useRef(null)
+
+  const handleMouseMove = (e) => {
+    if (e.buttons === 1) {
+      const x = e.clientX - ref.current.getBoundingClientRect().left
+      const choice = ((e.pageX / ref.current.offsetWidth) < 0.5) ? 'left' : 'right'
+      GameContextFn.moveTo(x, choice)
+    }
+  }
   // const styleFace = (ori) => { return { ...styles.face, ...ori } }
   // const pp3D = (
   //   <div style={styles.player}>
@@ -73,8 +90,14 @@ const Player = () => {
   //   </div>
   // )
 
-  const pp = <div style={styles.player1}>{state.val}</div>
-  return (pp)
+  const pp = <div className='player' style={styles.player1}>{state.val}</div>
+  return (
+
+    <div className='player-control' style={styles.playerControl} ref={ref} onMouseMove={handleMouseMove}>
+      {pp}
+    </div>
+
+  )
 }
 
 export default Player
