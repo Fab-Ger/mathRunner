@@ -3,7 +3,7 @@ import { useGame } from '../context/GameContext'
 import { useTimer } from '../context/TimerContext'
 
 const EndGame = () => {
-  const { state: { val }, GameContextFn } = useGame()
+  const { state: { val, score }, GameContextFn } = useGame()
   const { TimerContextFn } = useTimer()
   const ref = useRef(null)
   const styles = {
@@ -11,19 +11,20 @@ const EndGame = () => {
       position: 'absolute',
       top: 0,
       zIndex: 2,
-      justifyContent: 'center',
-      alignItems: 'center',
       height: '100vh',
       width: '100vw',
       backgroundColor: '#000000',
-      color: 'red'
+      color: 'red',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center'
     }
   }
   const reset = () => {
     TimerContextFn.reset()
     setTimeout(() => {
       GameContextFn.reset()
-    }, 1000)
+    }, 2000)
   }
   useEffect(() => {
     if (val <= 0) {
@@ -36,7 +37,7 @@ const EndGame = () => {
     <div>
       {val <= 0 &&
         <div ref={ref} id='dead' className='fade-in' style={styles.full} onClick={reset}>
-          <h1> You DIED</h1>
+          <h1> You DIED  {score} </h1>
         </div>}
     </div>
   )

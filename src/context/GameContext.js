@@ -7,12 +7,19 @@ const actionTypes = {
   MOVE: 'MOVE',
   MOVE_TO: 'MOVE_TO',
   SET_VAL: 'SET_VAL',
+  SET_SCORE: 'SET_SCORE',
+  SET_MESSAGE: 'SET_MESSAGE',
   SET_OP: 'SET_OP',
   SET_CHUNK: 'SET_CHUNK',
   RESET: 'RESET'
 }
 
 const initialState = {
+  message: { title: 'mess', content: '', display: false },
+  score: 0,
+  multiplyer: 1,
+  fightingChunk: 0,
+  reset: 0,
   position: 50,
   choice: 'left',
   val: 1,
@@ -49,13 +56,27 @@ const GameReducer = (state, action) => {
         ...state,
         opponent: action.op
       }
+    case actionTypes.SET_MESSAGE:
+      return {
+        ...state,
+        message: action.message
+      }
+    case actionTypes.SET_SCORE:
+      return {
+        ...state,
+        score: action.score,
+        multiplyer: state.multiplyer + 0.5
+      }
     case actionTypes.SET_CHUNK:
       return {
         ...state,
         chunks: [...state.chunks.slice(0, action.index), { ...state.chunks[action.index], ...action.chunk }, ...state.chunks.slice(action.index + 1)]
       }
     case actionTypes.RESET:
-      return initialState
+      return {
+        ...initialState,
+        reset: state.reset + 1
+      }
     default:
       throw new Error(`Unhandled action type : ${action.type}`)
   }
@@ -68,34 +89,28 @@ const GameProvider = ({ children }) => {
     dispatch({ type: actionTypes.MOVE, movement: movement })
   }
 
-  const moveTo = (position, choice) => {
-    dispatch({ type: actionTypes.MOVE_TO, position: position, choice: choice })
-  }
-  const setVal = (val) => {
-    dispatch({ type: actionTypes.SET_VAL, val: val })
-  }
-  const setOpponent = (opponent) => {
-    dispatch({ type: actionTypes.SET_OP, op: opponent })
-  }
-  const setChunk = (chunk, index) => {
-    dispatch({ type: actionTypes.SET_CHUNK, chunk: chunk, index: index })
-  }
+  const moveTo = (position, choice) => { dispatch({ type: actionTypes.MOVE_TO, position: position, choice: choice }) }
+  const setVal = (val) => { dispatch({ type: actionTypes.SET_VAL, val: val }) }
+  const setScore = (score) => { dispatch({ type: actionTypes.SET_SCORE, score: score }) }
+  const setMessage = (message) => { dispatch({ type: actionTypes.SET_MESSAGE, message: message }) }
+  const setOpponent = (opponent) => { dispatch({ type: actionTypes.SET_OP, op: opponent }) }
+  const setChunk = (chunk, index) => { dispatch({ type: actionTypes.SET_CHUNK, chunk: chunk, index: index }) }
+
   const applyChoice = (index) => {
     if (state.chunks[index].left && state.chunks[index].right) {
       console.log('computing ' + index)
+      const chosenCh = (state.choice === 'left') ? state.chunks[index].left : state.chunks[index].right
+
       const newVal = Math.round((
-        ((state.choice === 'left')
-          ? state.chunks[index].left.compute(state.val)
-          : state.chunks[index].right.compute(state.val)
-        ) +
-         Number.EPSILON) * 100) / 100
+        (chosenCh.compute(state.val)) + Number.EPSILON) * 100) / 100
+
       GameContextFn.setVal(newVal)
 
-      if (index === 0) {
+      if (index === 3) {
         let v = Math.max(state.chunks[2].left.compute(newVal),
-          state.chunks[3].right.compute(newVal))
+          state.chunks[2].right.compute(newVal))
         v = Math.max(state.chunks[1].left.compute(v),
-          state.chunks[2].right.compute(v))
+          state.chunks[1].right.compute(v))
         v = Math.floor(v * 0.9)
         GameContextFn.setOpponent(v)
       }
@@ -103,14 +118,17 @@ const GameProvider = ({ children }) => {
       console.log('not initialized ' + index)
     }
   }
-  const fight = () => {
+
+  const fight = (timerStep) => {
+    if (state.val - state.opponent > 0) { GameContextFn.setScore(state.score + (state.val - state.opponent) * state.multiplyer) }
+    GameContextFn.setMessage({ title: 'Figth', content: `${state.val} VS ${state.val}`, display: true })
     GameContextFn.setVal(state.val - state.opponent)
   }
 
   const reset = (chunk, index) => {
     dispatch({ type: actionTypes.RESET })
   }
-  const GameContextFn = { move, moveTo, setVal, setChunk, applyChoice, setOpponent, fight, reset }
+  const GameContextFn = { move, moveTo, setVal, setChunk, applyChoice, setOpponent, fight, reset, setScore, setMessage }
 
   return <GameContext.Provider value={{ state, GameContextFn }}>{children}</GameContext.Provider>
 }

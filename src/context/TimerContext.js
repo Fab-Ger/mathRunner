@@ -11,7 +11,7 @@ const actionTypes = {
 
 const initialState = {
   time: 1,
-  step: 1
+  step: 5
 }
 
 const TimerReducer = (state, action) => {

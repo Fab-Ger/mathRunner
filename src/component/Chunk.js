@@ -8,12 +8,18 @@ import Opponents from './Opponents'
 const Chunk = ({ chunk, pos, RoadHeight, nbChunk }) => {
   const [chosen, setChosen] = useState(false)
   const [fight, setFight] = useState(false)
-  const { state: timer } = useTimer()
-  const { state: { chunks }, GameContextFn } = useGame()
+  const { state: timer, TimerContextFn } = useTimer()
+  const { state: { chunks, reset, fightingChunk }, GameContextFn } = useGame()
 
   const h = RoadHeight / nbChunk + 10
 
   const position = ((timer.time / 10) + (pos * h)) % (4 * h) - h
+
+  useEffect(() => {
+    GameContextFn.setChunk({ left: rndFormula(), right: rndFormula() }, pos)
+    setChosen(false)
+    setFight(false)
+  }, [reset])
 
   const styles = {
     chunk: {
@@ -42,12 +48,18 @@ const Chunk = ({ chunk, pos, RoadHeight, nbChunk }) => {
     content: {
       backgroundColor: '#ddd',
       border: '2px solid ' + chunk.color,
+      display: 'flex',
+      justifyContent: 'center',
       alignItems: 'center',
       flex: 9
     },
     checkPoint: {
       background: 'grey',
       fontSize: '2em'
+    },
+    op: {
+      position: 'absolute',
+      top: 5 * h / 9
     }
   }
 
@@ -61,15 +73,16 @@ const Chunk = ({ chunk, pos, RoadHeight, nbChunk }) => {
         setFight(false)
       }
 
-      if (pos === 1 && dstToBottom < 100 && dstToBottom > 80 && !fight) {
-        console.log('fight' + (RoadHeight - position) + ' h ' + h / 9)
+      if (pos === fightingChunk && dstToBottom < 6 * h / 9 && dstToBottom > 5 * h / 9 && !fight) {
         setFight(true)
-        GameContextFn.fight()
+        GameContextFn.fight(timer.step)
+        TimerContextFn.shiftSpeed(2)
       }
 
       if (dstToBottom < 2 * h / 9 && dstToBottom > 0 && !chosen) {
         setChosen(true)
         GameContextFn.applyChoice(pos)
+        pos % 2 && TimerContextFn.shiftSpeed(1)
       }
     }
   }, [timer.time])
@@ -92,9 +105,7 @@ const Chunk = ({ chunk, pos, RoadHeight, nbChunk }) => {
         </div>
       </div>
       <div style={styles.content}>
-        {pos}
-        {pos === 1 && <Opponents />}
-
+        {pos === fightingChunk && <div><Opponents /></div>}
       </div>
 
     </div>

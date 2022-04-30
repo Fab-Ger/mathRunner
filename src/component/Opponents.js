@@ -5,7 +5,9 @@ const Opponents = () => {
 
   return (
     <div>
-      Opponents {opponent}
+      <h1>
+        Opponents {opponent}
+      </h1>
 
     </div>
   )
