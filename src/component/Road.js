@@ -3,7 +3,7 @@ import Chunk from './Chunk'
 import Player from './player/Player'
 
 const Road = () => {
-  const { state: { chunks } } = useGame()
+  const { state: { chunks, score, multiplyer } } = useGame()
   const RoadHeight = 500
 
   const styles = {
@@ -30,7 +30,7 @@ const Road = () => {
   return (
     <div style={styles.cont}>
       <h1>
-        Road
+        Road Score : {score} multiplyer : {multiplyer}
       </h1>
       <div style={styles.poss}>
 
