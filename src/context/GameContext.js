@@ -1,5 +1,5 @@
 import { useContext, createContext, useReducer } from 'react'
-import { rndFormula } from '../component/data/Formulas'
+import { rndFormula } from '../data/Formulas'
 
 const GameContext = createContext()
 
@@ -17,10 +17,10 @@ const actionTypes = {
 const initialState = {
   message: { title: 'mess', content: '', display: false },
   score: 0,
-  multiplyer: 1,
+  level: 1,
   fightingChunk: 0,
   reset: 0,
-  position: 50,
+  position: '50%',
   choice: 'left',
   val: 1,
   opponent: 1,
@@ -65,7 +65,7 @@ const GameReducer = (state, action) => {
       return {
         ...state,
         score: action.score,
-        multiplyer: state.multiplyer + 0.5
+        level: state.level + 1
       }
     case actionTypes.SET_CHUNK:
       return {
@@ -101,9 +101,9 @@ const GameProvider = ({ children }) => {
       console.log('computing ' + index)
       const chosenCh = (state.choice === 'left') ? state.chunks[index].left : state.chunks[index].right
 
-      const newVal = Math.round((
-        (chosenCh.compute(state.val)) + Number.EPSILON) * 100) / 100
+      const newVal = Number((Math.round(chosenCh.compute(state.val) * 100) / 100).toFixed(2))
 
+      GameContextFn.setMessage({ title: chosenCh.label, content: '', display: true })
       GameContextFn.setVal(newVal)
 
       if (index === 3) {
@@ -120,7 +120,7 @@ const GameProvider = ({ children }) => {
   }
 
   const fight = (timerStep) => {
-    if (state.val - state.opponent > 0) { GameContextFn.setScore(state.score + (state.val - state.opponent) * state.multiplyer) }
+    if (state.val - state.opponent > 0) { GameContextFn.setScore(state.score + (state.val - state.opponent) * (state.level / 2)) }
     GameContextFn.setMessage({ title: 'Figth', content: `${state.val} VS ${state.val}`, display: true })
     GameContextFn.setVal(state.val - state.opponent)
   }
