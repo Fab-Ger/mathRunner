@@ -1,9 +1,9 @@
 import { useEffect, useRef } from 'react'
-import { useGame } from '../context/GameContext'
-import { useTimer } from '../context/TimerContext'
+import { useGame } from '../../context/GameContext'
+import { useTimer } from '../../context/TimerContext'
 
 const EndGame = () => {
-  const { state: { val, score }, GameContextFn } = useGame()
+  const { state: { val, score, level }, GameContextFn } = useGame()
   const { TimerContextFn } = useTimer()
   const ref = useRef(null)
   const styles = {
@@ -14,17 +14,21 @@ const EndGame = () => {
       height: '100vh',
       width: '100vw',
       backgroundColor: '#000000',
-      color: 'red',
+      color: 'white',
       display: 'flex',
       justifyContent: 'center',
-      alignItems: 'center'
+      alignItems: 'center',
+      flexDirection: 'column'
+    },
+    red: {
+      color: 'red'
     }
   }
   const reset = () => {
     TimerContextFn.reset()
     setTimeout(() => {
       GameContextFn.reset()
-    }, 2000)
+    }, 1000)
   }
   useEffect(() => {
     if (val <= 0) {
@@ -37,7 +41,8 @@ const EndGame = () => {
     <div>
       {val <= 0 &&
         <div ref={ref} id='dead' className='fade-in' style={styles.full} onClick={reset}>
-          <h1> You DIED  {score} </h1>
+          <h1 style={styles.red}> You DIED at level {level} </h1>
+          <div>Score {score}</div>
         </div>}
     </div>
   )

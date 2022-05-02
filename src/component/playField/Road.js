@@ -1,10 +1,10 @@
-import { useGame } from '../context/GameContext'
+import { useGame } from '../../context/GameContext'
 import Chunk from './Chunk'
-import Player from './player/Player'
+import Player from '../player/Player'
 
 const Road = () => {
-  const { state: { chunks, score, multiplyer } } = useGame()
-  const RoadHeight = 500
+  const { state: { chunks, level } } = useGame()
+  const RoadHeight = 1000
 
   const styles = {
     view: {
@@ -12,17 +12,15 @@ const Road = () => {
       height: RoadHeight,
       border: '4px solid gold',
       overflow: 'hidden',
-      transform: 'rotate3d(1, 0, 0, 30deg)',
+      transform: 'rotate3d(1, 0, 0, 30deg) translateY(-200px) translateZ(100px)',
       transformStyle: 'preserve-3d'
     },
     poss: {
       perspective: 550,
-      paddingLeft: '5vw',
-      paddingRight: '5vw'
+      paddingLeft: '25vw',
+      paddingRight: '25vw'
     },
-    cont: {
-      margin: 50
-    }
+    cont: { }
   }
 
   // const chunks = [{ color: 'red' }, { color: 'green' }, { color: 'blue' }, { color: 'orange' }]
@@ -30,7 +28,7 @@ const Road = () => {
   return (
     <div style={styles.cont}>
       <h1>
-        Road Score : {score} multiplyer : {multiplyer}
+        Level {level}
       </h1>
       <div style={styles.poss}>
 

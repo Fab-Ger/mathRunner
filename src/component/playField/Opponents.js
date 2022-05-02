@@ -1,4 +1,4 @@
-import { useGame } from '../context/GameContext'
+import { useGame } from '../../context/GameContext'
 
 const Opponents = () => {
   const { state: { opponent } } = useGame()

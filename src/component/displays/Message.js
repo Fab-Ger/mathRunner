@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { useGame } from '../context/GameContext'
+import { useGame } from '../../context/GameContext'
 
 const Message = () => {
   const { state: { message }, GameContextFn } = useGame()
@@ -10,7 +10,8 @@ const Message = () => {
       position: 'absolute',
       top: '10%',
       // left: (ref.current && 'calc( 50% - ' + ref.current.width + 'px)'),
-      left: ref && ref.current && 'calc( 50% - ' + ref.current.getBoundingClientRect().width / 2 + 'px)',
+      // left: ref && ref.current && 'calc( 50% - ' + ref.current.getBoundingClientRect().width / 2 + 'px)',
+      left: 10,
       zIndex: 1,
       background: 'white',
       borderRadius: 20,

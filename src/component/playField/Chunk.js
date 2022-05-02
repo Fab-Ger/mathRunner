@@ -1,9 +1,9 @@
 
 import { useEffect, useState } from 'react'
-import { useGame } from '../context/GameContext'
-import { useTimer } from '../context/TimerContext'
-import { rndFormula } from './data/Formulas'
-import Opponents from './Opponents'
+import { useGame } from '../../context/GameContext'
+import { useTimer } from '../../context/TimerContext'
+import { rndFormula } from '../../data/Formulas'
+import Opponents from '../playField/Opponents'
 
 const Chunk = ({ chunk, pos, RoadHeight, nbChunk }) => {
   const [chosen, setChosen] = useState(false)

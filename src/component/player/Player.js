@@ -15,7 +15,7 @@ const Player = () => {
       left: state.position,
       color: 'white',
       padding: 10,
-      transform: 'rotate3d(1, 0, 0, 20deg)',
+      transform: 'rotate3d(1, 0, 0, 20deg) translateY(-200px) translateZ(100px)',
       boxShadow: '#00000061 0px 20px 20px 17px'
       // perspective: 20
     },
@@ -60,7 +60,7 @@ const Player = () => {
     { transform: 'rotateX(-90deg) translateZ(' + h / 2 + 'px)' },
 
     playerControl: {
-      height: '50%',
+      height: '100%',
       position: 'absolute',
       left: 0,
       bottom: 0,
