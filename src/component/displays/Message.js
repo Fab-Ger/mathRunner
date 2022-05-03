@@ -24,7 +24,7 @@ const Message = () => {
       if (message.display) {
         GameContextFn.setMessage({ ...message, display: false })
       }
-    }, 2000)
+    }, (message.delay) ? message.delay : 2000)
   }, [message])
 
   if (message.display) {

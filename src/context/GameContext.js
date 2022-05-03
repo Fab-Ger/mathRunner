@@ -15,7 +15,7 @@ const actionTypes = {
 }
 
 const initialState = {
-  message: { title: 'mess', content: '', display: false },
+  message: { title: 'Pour démarrer', content: 'Appuyer sur "Barre Espace"', delay: 10000, display: true },
   score: 0,
   level: 1,
   fightingChunk: 0,
@@ -121,7 +121,7 @@ const GameProvider = ({ children }) => {
 
   const fight = (timerStep) => {
     if (state.val - state.opponent > 0) { GameContextFn.setScore(state.score + (state.val - state.opponent) * (state.level / 2)) }
-    GameContextFn.setMessage({ title: 'Figth', content: `${state.val} VS ${state.val}`, display: true })
+    GameContextFn.setMessage({ title: 'Combat', content: `${state.val} VS ${state.opponent}`, display: true })
     GameContextFn.setVal(state.val - state.opponent)
   }
 

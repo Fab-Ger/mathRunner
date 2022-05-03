@@ -14,7 +14,9 @@ const Player = () => {
       bottom: 20,
       left: state.position,
       color: 'white',
-      padding: 10,
+      padding: 30,
+      fontSize: '2em',
+      fontWeight: 'bold',
       transform: 'rotate3d(1, 0, 0, 20deg) translateY(-200px) translateZ(100px)',
       boxShadow: '#00000061 0px 20px 20px 17px'
       // perspective: 20
