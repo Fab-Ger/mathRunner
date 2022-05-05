@@ -11,9 +11,9 @@ const Chunk = ({ chunk, pos, RoadHeight, nbChunk }) => {
   const { state: timer, TimerContextFn } = useTimer()
   const { state: { chunks, reset, fightingChunk }, GameContextFn } = useGame()
 
-  const h = RoadHeight / nbChunk + 10
+  const chunkHeight = RoadHeight ? RoadHeight / nbChunk + 10 : 100
 
-  const position = ((timer.time / 10) + (pos * h)) % (4 * h) - h
+  const position = chunkHeight ? (((timer.time / 10) + (pos * chunkHeight)) % (4 * chunkHeight) - chunkHeight) : 0
 
   useEffect(() => {
     GameContextFn.setChunk({ left: rndFormula(), right: rndFormula() }, pos)
@@ -25,7 +25,7 @@ const Chunk = ({ chunk, pos, RoadHeight, nbChunk }) => {
     chunk: {
       position: 'absolute',
       top: position,
-      height: h,
+      height: chunkHeight,
       width: '100%',
       background: chunk.color,
       display: 'flex',
@@ -59,7 +59,7 @@ const Chunk = ({ chunk, pos, RoadHeight, nbChunk }) => {
     },
     op: {
       position: 'absolute',
-      top: 5 * h / 9
+      top: 5 * chunkHeight / 9
     }
   }
 
@@ -67,19 +67,19 @@ const Chunk = ({ chunk, pos, RoadHeight, nbChunk }) => {
     if (timer.time > 150) {
       const dstToBottom = RoadHeight - position
 
-      if (chosen && position < h) {
+      if (chosen && position < chunkHeight) {
         GameContextFn.setChunk({ left: rndFormula(), right: rndFormula() }, pos)
         setChosen(false)
         setFight(false)
       }
 
-      if (pos === fightingChunk && dstToBottom < 6 * h / 9 && dstToBottom > 5 * h / 9 && !fight) {
+      if (pos === fightingChunk && dstToBottom < 6 * chunkHeight / 9 && dstToBottom > 5 * chunkHeight / 9 && !fight) {
         setFight(true)
         GameContextFn.fight(timer.step)
         TimerContextFn.shiftSpeed(2)
       }
 
-      if (dstToBottom < 2 * h / 9 && dstToBottom > 0 && !chosen) {
+      if (dstToBottom < 2 * chunkHeight / 9 && dstToBottom > 0 && !chosen) {
         setChosen(true)
         GameContextFn.applyChoice(pos)
         pos % 2 && TimerContextFn.shiftSpeed(1)

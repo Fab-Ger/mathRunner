@@ -8,11 +8,11 @@ import GameDisplay from '../component/displays/GameDisplay'
 const Game = () => {
   return (
     <div>
+      <TimerConrols />
+      <Road />
       <Message />
       <GameDisplay />
       <EndGame />
-      <TimerConrols />
-      <Road />
     </div>
   )
 }

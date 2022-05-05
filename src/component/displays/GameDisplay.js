@@ -8,6 +8,7 @@ const GameDisplay = () => {
       right: 10,
       top: 50,
       background: 'white',
+      opacity: 0.6,
       borderRadius: 20,
       padding: 20
     }

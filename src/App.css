@@ -3,6 +3,7 @@ body{
 }
 
 .App {
+  height:100vh;
   text-align: center;
   background-color: #77787a;
   -webkit-touch-callout: none; /* iOS Safari */

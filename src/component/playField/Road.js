@@ -1,12 +1,24 @@
 import { useGame } from '../../context/GameContext'
 import Chunk from './Chunk'
 import Player from '../player/Player'
+import { useWindowSize } from '../../utils/view'
+import { useEffect } from 'react'
 
 const Road = () => {
   const { state: { chunks, level } } = useGame()
-  const RoadHeight = 1000
+  const [, height] = useWindowSize()
+  // const { RoadHeight, setRoadHeight } = useState(vh(100))
+  let RoadHeight = height
+  useEffect(() => {
+    // setRoadHeight(height)
+    RoadHeight = height
+  }, [height])
 
   const styles = {
+    title: {
+      fontSize: '2em',
+      fontWeight: 'bold'
+    },
     view: {
       position: 'relative',
       height: RoadHeight,
@@ -27,9 +39,10 @@ const Road = () => {
 
   return (
     <div style={styles.cont}>
-      <h1>
+
+      <div style={styles.title}>
         Level {level}
-      </h1>
+      </div>
       <div style={styles.poss}>
 
         <div style={styles.view}>

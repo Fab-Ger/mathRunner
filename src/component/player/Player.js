@@ -3,8 +3,8 @@ import { useGame } from '../../context/GameContext'
 
 const Player = () => {
   const { state, GameContextFn } = useGame()
-  const h = 100
-  const w = 50
+  // const h = 100
+  // const w = 50
 
   const styles = {
     player1: {
@@ -21,6 +21,14 @@ const Player = () => {
       boxShadow: '#00000061 0px 20px 20px 17px'
       // perspective: 20
     },
+    playerControl: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      bottom: 0,
+      right: 0
+    }
+    /*
     player: {
       borderRadius: 20,
       background: 'black',
@@ -60,22 +68,22 @@ const Player = () => {
     { transform: 'rotateX(90deg) translateZ(' + h / 2 + 'px)' },
     bottom:
     { transform: 'rotateX(-90deg) translateZ(' + h / 2 + 'px)' },
-
-    playerControl: {
-      height: '100%',
-      position: 'absolute',
-      left: 0,
-      bottom: 0,
-      right: 0
-    }
+*/
   }
 
   const ref = useRef(null)
 
   const handleMouseMove = (e) => {
-    if (e.buttons === 1) {
-      const x = e.clientX - ref.current.getBoundingClientRect().left
-      const choice = ((e.pageX / ref.current.offsetWidth) < 0.5) ? 'left' : 'right'
+    let posX
+    if (e.type === 'touchmove') {
+      const touch = e.touches[0] || e.changedTouches[0]
+      posX = touch.pageX
+    } else if (e.type === 'mousemove' && e.buttons === 1) {
+      posX = e.pageX
+    }
+    if (posX) {
+      const x = posX - ref.current.getBoundingClientRect().left
+      const choice = ((posX / ref.current.offsetWidth) < 0.5) ? 'left' : 'right'
       GameContextFn.moveTo(x, choice)
     }
   }
@@ -95,7 +103,7 @@ const Player = () => {
   const pp = <div className='player' style={styles.player1}>{state.val}</div>
   return (
 
-    <div className='player-control' style={styles.playerControl} ref={ref} onMouseMove={handleMouseMove}>
+    <div className='player-control' style={styles.playerControl} ref={ref} onTouchMove={handleMouseMove} onMouseMove={handleMouseMove}>
       {pp}
     </div>
 
