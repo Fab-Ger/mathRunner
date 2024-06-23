@@ -9,18 +9,24 @@ const TimerConrols = () => {
   const { state, TimerContextFn } = useTimer()
   const { state: { reset }, GameContextFn } = useGame()
 
-  const restart = () => { GameContextFn.reset() }
+  const restart = () => {
+    TimerContextFn.reset() 
+    GameContextFn.reset() 
+  }
 
   const switchTimer = () => {
     console.log('switchTimer started: ' + started)
     setStarted(!started)
   }
 
+
   useEffect(() => {
     console.log('useEffect ' + started)
     started
       ? TimerContextFn.start()
       : TimerContextFn.stop()
+
+
   }, [started])
 
   useEffect(() => { setStarted(false) }, [reset])

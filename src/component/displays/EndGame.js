@@ -25,6 +25,7 @@ const EndGame = () => {
     }
   }
   const reset = () => {
+    TimerContextFn.stop()
     TimerContextFn.reset()
     setTimeout(() => {
       GameContextFn.reset()

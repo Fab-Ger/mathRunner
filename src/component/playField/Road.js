@@ -5,7 +5,7 @@ import { useWindowSize } from '../../utils/view'
 import { useEffect } from 'react'
 
 const Road = () => {
-  const { state: { chunks, level } } = useGame()
+  const { state: { chunks, level, fightingChunk, nbChunks} } = useGame()
   const [, height] = useWindowSize()
   // const { RoadHeight, setRoadHeight } = useState(vh(100))
   let RoadHeight = height
@@ -47,8 +47,9 @@ const Road = () => {
 
         <div style={styles.view}>
           {chunks.map((ch, index) => (
-            <Chunk key={index} pos={index} chunk={ch} RoadHeight={RoadHeight} nbChunk={2} />
+            <Chunk key={index} pos={index} chunk={ch} RoadHeight={RoadHeight} />
           ))}
+          <Chunk pos={chunks.length} chunk={fightingChunk} RoadHeight={RoadHeight} />
 
         </div>
         <Player />

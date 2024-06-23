@@ -9,13 +9,15 @@ const opterators = [
 ]
 
 const getFormulas = () => {
+  // if(true) return [{ weight: 4, label: ' = 4', compute: (val) => { return 4 } }]
+
   const forms = []
   for (let i = 1; i < 5; i++) {
     for (let index = 0; index < opterators.length; index++) {
       const ope = opterators[index]
       forms.push({
         label: `${ope.label}${i}`,
-        compute: (val) => { return ope.compute(val, i) },
+        compute: (val) => { return Number((Math.round(ope.compute(val, i) * 100) / 100).toFixed(2)) },
         weight: ope.weight
       })
     }
@@ -44,6 +46,7 @@ const mulberry32 = (a) => {
     return ((t ^ t >>> 14) >>> 0) / 4294967296
   }
 }
+
 const rndd = mulberry32(Date.now())
 
 const rndFormula = () => {
@@ -54,5 +57,5 @@ const rndFormula = () => {
   return forms[index]
 }
 export {
-  rndFormula
+  rndFormula, mulberry32
 }
